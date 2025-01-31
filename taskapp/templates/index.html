@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}task_management{% endblock %}
+
+{% block head %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">{% endblock %}
+
+{% block content %}
+<div class="content">
+
+
+    <div class="control-bar">
+        {% if is_guest_user %}
+            <p>ゲストさん</p>
+        {% else %}
+            <p>{{ user }}さん</p>
+        {% endif %}
+        <button type="submit" data-toggle="modal" data-target="#myModal">タスク追加</button>
+        <div class="dropdown" id="dropdown">
+            <button class="dropbtn" id="order-title">並び替え ▼</button>
+            <div class="dropdown-content">
+                <button onclick="sortTasks('pk')" id="order-pk">追加順</button>
+                <button onclick="sortTasks('priority')" id="order-priority">優先度順</button>
+                <button onclick="sortTasks('date')" id="order-date">期限順</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="task-list">
+        {% for task in tasks %}
+        <div class="task-row">
+            <div class="task-priority priority-{{ task.priority }}"></div>
+
+            <a href="#" class="task-detail-link" data-toggle="modal" data-target="#taskDetailModal"
+                data-task-id="{{ task.pk }}"
+                data-task-name="{{ task.task_name }}"
+                data-task-details="{{ task.details }}"
+                data-task-date="{{ task.date|date:"Y-m-d" }}"
+                data-task-priority="{{ task.get_priority_display }}">
+                {{ task.task_name|truncatechars:15 }}
+            </a>
+            <span><small>期限: </small>{{ task.date|date:"Y-m-d" }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    
+
+    <div class="priority-legend">
+        <span><small>優先度：</small></span>
+        <span class="priority-box green"></span>
+        <span>&lt;</span>
+        <span class="priority-box light-green"></span>
+        <span>&lt;</span>
+        <span class="priority-box yellow"></span>
+        <span>&lt;</span>
+        <span class="priority-box orange"></span>
+        <span>&lt;</span>
+        <span class="priority-box red"></span>
+    </div>
+    
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">タスク追加</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% include 'add_task.html' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">close</button>
+                    <input type="submit" class="btn btn-secondary" id="add_task" value="add">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskDetailModalLabel">タスク詳細</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'task_detail.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

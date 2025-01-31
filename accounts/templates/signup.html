@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}新規登録{% endblock %}
+
+{% block content %}
+    <div class="account_content">
+    <form method = "post" id="account">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div style="color: red;">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <h1 id="account_title">Sign up</h1>
+        <p>
+            <label for="id_username">username</label>
+            <input type="text" name="username" id="id_username" requierd autofocus>
+        </p>
+        <p>
+            <label for="id_password">password</label>
+            <input type="password" name="password" id="id_password" required autofocus>
+        </p>
+        <input type="submit" value="Sign up">
+        <p>
+            <a href="{% url 'accounts:login' %}">login</a>
+            <br>
+            <a href="{% url 'accounts:login_guest' %}">login as guest</a>
+        </p>
+    </form>
+    </div>
+{% endblock %}

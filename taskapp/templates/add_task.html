@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th><label for="task_name">タイトル</label></th>
+                <td><input type="text" name="task_name" id="task_name" class="input_form" required autofocus></td>
+            </tr>
+
+            <tr class="line">
+                <th><label for="details">詳細</label></th>
+                <td><textarea name="details" rows="4" col="50" class="input_form" required></textarea></td>
+            </tr>
+
+            <tr class="line">
+                <th><label for="date">期限</label></th>
+                <td><input type="date" name="date" id="date" class="input_form" required></td>
+            </tr>
+
+            <tr class="line">
+                <th><label for="priority">優先度</label></th>
+                <td>
+                    <input type="range" min="1" max="5" value="3" name="priority" id="priority" class="input_form" required>
+                    <span id="rangeValue">3</span>
+                    <br>
+                    数値が大きいほど優先度が高いです
+                </td>
+            </tr>
+
+        </table>
+
+</body>
+</html>
