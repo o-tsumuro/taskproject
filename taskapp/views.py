@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .models import Task
 from .forms import TaskForm
+from django.http import JsonResponse
 
 class FormAndListView(TemplateView):
     template_name = "index.html"
@@ -36,3 +37,10 @@ class FormAndListView(TemplateView):
 def task_detail(request, pk):
         task = get_object_or_404(Task, pk=pk)
         return render(request, 'task_detail.html', {'task': task})
+
+def delete_task(request, task_id):
+    if request.method == 'POST':
+        task = get_object_or_404(Task, pk=task_id)
+        task.delete()
+        return JsonResponse({'message': 'タスクが削除されました'})
+    return JsonResponse({'message': '無効なリクエスト'}, status=400)
